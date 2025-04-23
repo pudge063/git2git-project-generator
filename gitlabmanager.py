@@ -15,7 +15,6 @@ class Gitlabmanager:
         self.dsit_approvals = configs["dsit_approvals"]
         self.approvals_required = configs["approvals_required"]
 
-        self.vendor_branch = configs["vendor_branch"]
         self.template = configs["template"]
 
         self.gitlab_token = configs["gitlab_token"]
@@ -31,7 +30,11 @@ class Gitlabmanager:
         dsit_approvals_ids = self.find_users_in_gitlab(self.dsit_approvals)
         mr_list_ids = self.find_users_in_gitlab(self.mr_list)
 
-        for project_name, develop_repo, external_repo in self.repo_list:
+        for project in self.repo_list:
+            project_name = project[0]
+            variables = project[1]
+
+            print("Creating project...")
             project_id, project_url = self.import_project_from_template(project_name)
             if project_id and project_url:
                 urls.append(project_url)
@@ -39,13 +42,12 @@ class Gitlabmanager:
                 print("Exit with code 1.")
                 exit(1)
 
-            print("Creating project... Sleep 5 seconds...")
+            print("Sleep 5 seconds...")
             time.sleep(5)
 
             # set gitlab ci vars
-            self.set_gitlab_ci_variable(project_id, "DEVELOP_REPO", develop_repo)
-            self.set_gitlab_ci_variable(project_id, "EXTERNAL_REPO", external_repo)
-            self.set_gitlab_ci_variable(project_id, "VENDOR_BRANCH", self.vendor_branch)
+            for k, v in variables.items():
+                self.set_gitlab_ci_variable(project_id, k, v)
 
             # approval_rules with DIB && DSIT approvers
             if dib_approvals_ids:
@@ -172,6 +174,8 @@ class Gitlabmanager:
         r = requests.delete(
             url=f"{base_url}/{branch}", headers=headers, json=data, verify=False
         )
+
+        time.sleep(5)
 
         print(f"UNPROTECTED BRANCH: {branch}", r.status_code)
 

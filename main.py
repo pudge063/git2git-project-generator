@@ -13,11 +13,10 @@ def parseReposList():
         yaml_data = repolist.read()
         data = yaml.safe_load(yaml_data)
 
-        # repos
-        repo_list = [
-            [rd["repo_name"], rd["develop_repo"], rd["external_repo"]]
-            for repo, rd in data["repos"].items()
-        ]
+        repo_list = []
+
+        for _, repo_data in data["repos"].items():
+            repo_list.append([repo_data["repo_name"], repo_data["variables"]])
 
         # configs
         configs = {}

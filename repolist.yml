@@ -1,18 +1,17 @@
 repos:
   repo-1:
-    repo_name: repo-name-1
-    develop_repo: DEVELOP-REPO-1
-    external_repo: EXTERNAL-REPO-2
+    repo_name: repo-name-5
+    variables:
+      DEVELOP_REPO: DEVELOP-REPO-1
+      EXTERNAL_REPO: EXTERNAL-REPO-1
+      VENDOR_BRANCH: master-1
 
   repo-2:
-    repo_name: repo-name-2
-    develop_repo: DEVELOP-REPO-2
-    external_repo: EXTERNAL-REPO-2
-
-  repo-3:
-    repo_name: repo-name-3
-    develop_repo: DEVELOP-REPO-3
-    external_repo: EXTERNAL-REPO-3
+    repo_name: repo-name-6
+    variables:  
+      DEVELOP_REPO: DEVELOP-REPO-2
+      EXTERNAL_REPO: EXTERNAL-REPO-2
+      VENDOR_BRANCH: master-2
 
 configs:
   target_group: 159
@@ -28,6 +27,5 @@ configs:
     - nikulinaa
     - ozerovaav
   approvals_required: 2
-  vendor_branch: master
   template: pull
   gitlab_url: https://pivlab.space
